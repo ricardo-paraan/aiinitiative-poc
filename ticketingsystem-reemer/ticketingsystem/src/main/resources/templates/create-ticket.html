@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create New Ticket - Ticketing Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .back-link {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .back-link:hover {
+            color: #495057;
+        }
+        .back-link::before {
+            content: "←";
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #212529;
+        }
+        .subtitle {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #212529;
+        }
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+        .form-label .required {
+            color: #dc3545;
+            margin-left: 2px;
+        }
+        .form-control, .form-select {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 14px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        .form-control::placeholder, .form-select::placeholder {
+            color: #adb5bd;
+        }
+        .char-count {
+            font-size: 12px;
+            color: #6c757d;
+            text-align: right;
+            margin-top: 4px;
+        }
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 6px;
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #adb5bd;
+            background-color: #e9ecef;
+        }
+        .upload-icon {
+            font-size: 32px;
+            color: #6c757d;
+            margin-bottom: 12px;
+        }
+        .upload-text {
+            font-size: 14px;
+            color: #212529;
+            margin-bottom: 4px;
+        }
+        .upload-subtext {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .btn-submit {
+            background-color: #212529;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            width: 100%;
+            transition: background-color 0.15s ease-in-out;
+        }
+        .btn-submit:hover {
+            background-color: #000000;
+            color: white;
+        }
+        .btn-cancel {
+            background-color: white;
+            color: #212529;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.15s ease-in-out;
+        }
+        .btn-cancel:hover {
+            background-color: #f8f9fa;
+            border-color: #adb5bd;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        .mb-4 {
+            margin-bottom: 24px !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <a href="/" class="back-link">Back to Dashboard</a>
+    
+    <h2>Create New Ticket</h2>
+    <p class="subtitle">Submit a new support ticket for your issue or request</p>
+    
+    <form id="createTicketForm" th:action="@{/tickets/create}" th:object="${ticket}" method="post">
+        
+        <div class="section-title">Ticket Information</div>
+        
+        <!-- Title Field -->
+        <div class="mb-4">
+            <label for="title" class="form-label">Title<span class="required">*</span></label>
+            <input type="text" 
+                   class="form-control" 
+                   id="title" 
+                   name="title"
+                   th:field="*{title}"
+                   placeholder="Brief description of the issue"
+                   maxlength="100"
+                   required
+                   oninput="updateCharCount('title', 'titleCount', 100)">
+            <div class="char-count"><span id="titleCount">0/100</span> characters</div>
+        </div>
+
+        <!-- Author Field -->
+        <div class="mb-4">
+            <label for="author" class="form-label">Author<span class="required">*</span></label>
+            <input type="text" 
+                   class="form-control" 
+                   id="author" 
+                   name="author"
+                   th:field="*{author}"
+                   placeholder="Enter your name" 
+                   required>
+        </div>
+
+        <!-- System Dropdown -->
+        <div class="mb-4">
+            <label for="systemName" class="form-label">System<span class="required">*</span></label>
+            <select class="form-select" 
+                    id="systemName" 
+                    name="systemName"
+                    th:field="*{systemName}"
+                    required>
+                <option value="" selected disabled>Select the system related to your issue</option>
+                <option value="CRM">CRM - Customer Relationship Management</option>
+                <option value="ERP">ERP - Enterprise Resource Planning</option>
+                <option value="HRM">HRM - Human Resource Management</option>
+                <option value="Inventory">Inventory Management System</option>
+                <option value="Finance">Finance & Accounting System</option>
+                <option value="IT Support">IT Support System</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="mb-4">
+            <label for="category" class="form-label">Category<span class="required">*</span></label>
+            <select class="form-select" 
+                    id="category" 
+                    name="category"
+                    th:field="*{category}"
+                    required>
+                <option value="" selected disabled>Select a system line</option>
+                <option value="Bug">Bug / Error</option>
+                <option value="Feature Request">Feature Request</option>
+                <option value="Enhancement">Enhancement</option>
+                <option value="Support">Technical Support</option>
+                <option value="Question">Question / Inquiry</option>
+                <option value="Documentation">Documentation</option>
+                <option value="Performance">Performance Issue</option>
+                <option value="Security">Security Concern</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- Description Field -->
+        <div class="mb-4">
+            <label for="description" class="form-label">Description<span class="required">*</span></label>
+            <textarea class="form-control" 
+                      id="description" 
+                      name="description"
+                      th:field="*{description}"
+                      rows="6" 
+                      placeholder="Provide a detailed description of your issue or request. Include any relevant information that might help us resolve your ticket faster."
+                      maxlength="5000"
+                      required
+                      oninput="updateCharCount('description', 'descCount', 5000)"></textarea>
+            <div class="char-count"><span id="descCount">0/5000</span> characters</div>
+        </div>
+
+        <!-- Attachment Field -->
+        <div class="mb-4">
+            <label for="attachment" class="form-label">Attachments (Optional)</label>
+            <div class="upload-area" onclick="document.getElementById('attachment').click()">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Click to upload or drag and drop</div>
+                <div class="upload-subtext">PDF, DOC, PNG, JPG, TXT, XLSX (Max 5MB per file)</div>
+            </div>
+            <input type="text" 
+                   class="form-control mt-2" 
+                   id="attachment" 
+                   name="attachment"
+                   placeholder="Or enter attachment URL or file path"
+                   style="display: block;">
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+            <button type="submit" class="btn btn-submit">Submit Ticket</button>
+            <button type="button" class="btn btn-cancel" onclick="clearForm()">Cancel</button>
+        </div>
+
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script>
+    // Character count function
+    function updateCharCount(fieldId, countId, maxLength) {
+        const field = document.getElementById(fieldId);
+        const count = document.getElementById(countId);
+        const currentLength = field.value.length;
+        count.textContent = currentLength + '/' + maxLength;
+    }
+
+    // Initialize character counts on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCharCount('title', 'titleCount', 100);
+        updateCharCount('description', 'descCount', 5000);
+    });
+
+    // Clear form function
+    function clearForm() {
+        if (confirm('Are you sure you want to clear all fields?')) {
+            document.getElementById('createTicketForm').reset();
+            updateCharCount('title', 'titleCount', 100);
+            updateCharCount('description', 'descCount', 5000);
+        }
+    }
+
+    // Form validation feedback
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
+</body>
+</html>

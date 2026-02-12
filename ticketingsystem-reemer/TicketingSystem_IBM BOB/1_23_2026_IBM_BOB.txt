@@ -1,0 +1,63 @@
+
+Analyze the database configuration mismatch
+Determine which database system to use (PostgreSQL or SQL Server)
+Update application.properties with correct JDBC configuration
+Update pom.xml with correct database driver dependency
+Add additional Hibernate/JPA configuration properties
+Rebuild the project with Maven
+Verify database server is running and accessible
+Test the database connection by running the application
+
+
+I'll help you diagnose and resolve this JDBC connection error. Let me gather more information about your database configuration and application setup.
+
+The error "org.hibernate.exception.JDBCConnectionException: Unable to obtain isolated JDBC connection [Connection reset ClientConnectionId:a6c3d30e-4bc8-4ab3-9291-ce558a5873ce]" suggests a database connectivity issue. This could be caused by:
+
+Database server is down or unreachable
+Incorrect connection credentials
+Network issues
+Connection pool configuration problems
+Firewall blocking the connection
+Database connection timeout
+I need to:
+
+Check the application.properties file to see the database configuration
+Look at the entity classes to understand the database schema
+Check if there are any connection pool settings
+Understand what database they're using (looks like SQL Server based on the ClientConnectionId format)
+Let me start by reading the application.properties file.
+
+
+
+I want to read this file:
+
+
+I found the issue! The application.properties file has a configuration mismatch:
+
+The JDBC URL is using jdbc:sqlserver:// (SQL Server driver)
+But it's connecting to port 5432 (which is PostgreSQL's default port)
+The username is "postgres" (PostgreSQL default user)
+SQL Server's default port is 1433, not 5432
+This is clearly a configuration error where they're trying to connect to a PostgreSQL database but using the SQL Server JDBC driver URL format.
+
+Let me read the pom.xml to see which database driver dependency is included, and also check one of the entity files to understand the database setup better.
+
+
+I want to read these files:
+
+
+Perfect! I've identified the root cause of your JDBC connection error. Let me create a diagnostic plan and solution.
+
+
+Analyze the database configuration mismatch
+Determine which database system to use (PostgreSQL or SQL Server)
+Update application.properties with correct JDBC configuration
+Update pom.xml with correct database driver dependency
+Add additional Hibernate/JPA configuration properties
+Verify database server is running and accessible
+Test the database connection
+
+Start New Task
+What's on your mind?
+
+💻 Code

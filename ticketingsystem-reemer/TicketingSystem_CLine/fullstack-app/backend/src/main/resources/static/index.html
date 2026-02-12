@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Management System</title>
+    <link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div>
+                    <h1>🎫 Ticket Management System</h1>
+                    <p>Track and manage support tickets efficiently</p>
+                </div>
+                <div class="header-right">
+                    <a href="create-ticket.html" class="btn-create-ticket">
+                        ➕ Create New Ticket
+                    </a>
+                    <div class="header-stats">
+                        <div class="stat-card">
+                            <span class="stat-number" id="totalCount">0</span>
+                            <span class="stat-label">Total Tickets</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number stat-open" id="openCount">0</span>
+                            <span class="stat-label">Open</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number stat-progress" id="progressCount">0</span>
+                            <span class="stat-label">In Progress</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number stat-closed" id="closedCount">0</span>
+                            <span class="stat-label">Closed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Error Banner -->
+        <div id="errorBanner" class="error-banner">
+            ⚠️ <span id="errorMessage"></span>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-section">
+            <div class="search-filter-group">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search by title, author, or ID...">
+                </div>
+                <div class="filter-group">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="open">Open</option>
+                        <option value="in progress">In Progress</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    <select id="systemFilter" class="filter-select">
+                        <option value="">All Systems</option>
+                    </select>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="sort-pagination-group">
+                <div class="sort-group">
+                    <label>Sort by:</label>
+                    <select id="sortBy" class="sort-select">
+                        <option value="id-desc">Newest First</option>
+                        <option value="id-asc">Oldest First</option>
+                        <option value="title-asc">Title A-Z</option>
+                        <option value="title-desc">Title Z-A</option>
+                        <option value="status-asc">Status A-Z</option>
+                    </select>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">
+                        <span>⊞</span> Grid
+                    </button>
+                    <button class="view-btn" data-view="table">
+                        <span>☰</span> Table
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading tickets...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <h2>📭 No Tickets Found</h2>
+            <p id="emptyMessage">No tickets available.</p>
+        </div>
+
+        <!-- Grid View -->
+        <div id="ticketsGrid" class="tickets-grid"></div>
+
+        <!-- Table View -->
+        <div id="ticketsTable" class="tickets-table-container" style="display:none;">
+            <table class="tickets-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>System</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Status Comment</th>
+                        <th>Created</th>
+                        <th>Comments</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="pagination">
+            <button id="prevPage" class="page-btn">‹ Previous</button>
+            <div id="pageNumbers" class="page-numbers"></div>
+            <button id="nextPage" class="page-btn">Next ›</button>
+        </div>
+    </div>
+
+    <script src="app.js?v=4"></script>
+</body>
+</html>

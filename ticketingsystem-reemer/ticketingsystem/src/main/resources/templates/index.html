@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Tickets - Ticketing Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #212529;
+            margin: 0;
+        }
+        .subtitle {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .btn-create {
+            background-color: #212529;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.15s ease-in-out;
+        }
+        .btn-create:hover {
+            background-color: #000000;
+            color: white;
+        }
+        .btn-create::before {
+            content: "+";
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stat-content h3 {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 500;
+            margin: 0 0 8px 0;
+        }
+        .stat-content .stat-number {
+            font-size: 32px;
+            font-weight: 600;
+            color: #212529;
+            margin: 0;
+        }
+        .stat-icon {
+            font-size: 32px;
+            opacity: 0.8;
+        }
+        .stat-icon.pending { color: #ffc107; }
+        .stat-icon.progress { color: #0d6efd; }
+        .stat-icon.resolved { color: #198754; }
+        .search-filter-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .filter-select {
+            padding: 10px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        .ticket-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .ticket-table thead {
+            border-bottom: 2px solid #dee2e6;
+        }
+        .ticket-table th {
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .ticket-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #f1f3f5;
+            font-size: 14px;
+            color: #212529;
+        }
+        .ticket-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .ticket-id {
+            font-weight: 600;
+            color: #212529;
+        }
+        .ticket-title {
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .ticket-title:hover {
+            text-decoration: underline;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-progress {
+            background-color: #cfe2ff;
+            color: #084298;
+        }
+        .status-resolved {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+        .pagination-info {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            background: white;
+            color: #495057;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+        .page-btn:hover:not(:disabled) {
+            background-color: #f8f9fa;
+            border-color: #adb5bd;
+        }
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .page-btn.active {
+            background-color: #212529;
+            color: white;
+            border-color: #212529;
+        }
+        .alert {
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div>
+            <h1>My Tickets</h1>
+        </div>
+        <a class="btn-create" href="/tickets/create">Create New Ticket</a>
+    </div>
+    <p class="subtitle">Track and manage your submitted tickets</p>
+    
+    <!-- Success/Error Messages -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-content">
+                <h3>Pending</h3>
+                <p class="stat-number" id="pendingTickets">0</p>
+            </div>
+            <div class="stat-icon pending">⚠️</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-content">
+                <h3>In Progress</h3>
+                <p class="stat-number" id="ongoingTickets">0</p>
+            </div>
+            <div class="stat-icon progress">🕐</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-content">
+                <h3>Resolved</h3>
+                <p class="stat-number" id="resolvedTickets">0</p>
+            </div>
+            <div class="stat-icon resolved">✓</div>
+        </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-filter-section">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by Ticket ID or Title...">
+        </div>
+        <div class="filters">
+            <select class="filter-select" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="PENDING">Pending</option>
+                <option value="ONGOING">In Progress</option>
+                <option value="RESOLVED">Resolved</option>
+            </select>
+            <select class="filter-select" id="systemFilter">
+                <option value="">All Systems</option>
+                <option value="CRM">CRM</option>
+                <option value="ERP">ERP</option>
+                <option value="HRM">HRM</option>
+                <option value="Inventory">Inventory</option>
+                <option value="Finance">Finance</option>
+                <option value="IT Support">IT Support</option>
+                <option value="Other">Other</option>
+            </select>
+            <select class="filter-select" id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="Bug">Bug / Error</option>
+                <option value="Feature Request">Feature Request</option>
+                <option value="Enhancement">Enhancement</option>
+                <option value="Support">Technical Support</option>
+                <option value="Question">Question / Inquiry</option>
+                <option value="Documentation">Documentation</option>
+                <option value="Performance">Performance Issue</option>
+                <option value="Security">Security Concern</option>
+                <option value="Other">Other</option>
+            </select>
+            <select class="filter-select" id="sortFilter">
+                <option value="newest">Date (Newest First)</option>
+                <option value="oldest">Date (Oldest First)</option>
+                <option value="title">Title (A-Z)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Tickets Table -->
+    <div class="table-container">
+        <table class="ticket-table">
+            <thead>
+                <tr>
+                    <th>Ticket ID</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>System</th>
+                    <th>Category</th>
+                    <th>Date Submitted</th>
+                    <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody id="ticketTableBody">
+                <!-- Tickets will be loaded here via JavaScript -->
+            </tbody>
+        </table>
+        
+        <!-- Pagination -->
+        <div class="pagination">
+            <div class="pagination-info" id="paginationInfo">
+                Showing 0 to 0 of 0 tickets
+            </div>
+            <div class="pagination-controls">
+                <button class="page-btn" id="prevBtn" onclick="previousPage()">Previous</button>
+                <button class="page-btn active" id="page1Btn">1</button>
+                <button class="page-btn" id="page2Btn">2</button>
+                <button class="page-btn" id="nextBtn" onclick="nextPage()">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script>
+    const API_URL = "http://localhost:8080/api/tickets";
+    let allTickets = [];
+    let filteredTickets = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // Load statistics
+    async function loadStatistics() {
+        try {
+            const pendingResponse = await fetch("http://localhost:8080/api/pendingstatus");
+            const pendingCount = await pendingResponse.json();
+            document.getElementById("pendingTickets").textContent = pendingCount;
+
+            const ongoingResponse = await fetch("http://localhost:8080/api/ongoingstatus");
+            const ongoingCount = await ongoingResponse.json();
+            document.getElementById("ongoingTickets").textContent = ongoingCount;
+
+            const resolvedResponse = await fetch("http://localhost:8080/api/resolvedstatus");
+            const resolvedCount = await resolvedResponse.json();
+            document.getElementById("resolvedTickets").textContent = resolvedCount;
+        } catch (err) {
+            console.error("Failed to fetch statistics:", err);
+        }
+    }
+
+    // Load tickets
+    async function loadTickets() {
+        try {
+            const response = await fetch(API_URL);
+            allTickets = await response.json();
+            filteredTickets = [...allTickets];
+            applyFilters();
+        } catch (err) {
+            console.error("Failed to fetch tickets:", err);
+        }
+    }
+
+    // Format date
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    // Get status badge HTML
+    function getStatusBadge(status) {
+        const statusLower = status.toLowerCase();
+        let badgeClass = 'status-badge ';
+        if (statusLower.includes('pending')) badgeClass += 'status-pending';
+        else if (statusLower.includes('ongoing') || statusLower.includes('progress')) badgeClass += 'status-progress';
+        else if (statusLower.includes('resolved')) badgeClass += 'status-resolved';
+        
+        return `<span class="${badgeClass}">${status}</span>`;
+    }
+
+    // Display tickets
+    function displayTickets() {
+        const tbody = document.getElementById("ticketTableBody");
+        tbody.innerHTML = "";
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const ticketsToShow = filteredTickets.slice(startIndex, endIndex);
+
+        if (ticketsToShow.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">No tickets found</td></tr>';
+            updatePaginationInfo(0, 0, 0);
+            return;
+        }
+
+        ticketsToShow.forEach(ticket => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td class="ticket-id">#${ticket.ticketId}</td>
+                <td><a href="#" class="ticket-title">${ticket.title || 'Untitled'}</a></td>
+                <td>${getStatusBadge(ticket.status || 'Unknown')}</td>
+                <td>${ticket.systemName || 'N/A'}</td>
+                <td>${ticket.category || 'N/A'}</td>
+                <td>${formatDate(ticket.createdDate)}</td>
+                <td>${formatDate(ticket.updateDate)}</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        updatePaginationInfo(startIndex + 1, Math.min(endIndex, filteredTickets.length), filteredTickets.length);
+    }
+
+    // Update pagination info
+    function updatePaginationInfo(start, end, total) {
+        document.getElementById("paginationInfo").textContent = `Showing ${start} to ${end} of ${total} tickets`;
+    }
+
+    // Apply filters
+    function applyFilters() {
+        const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+        const statusFilter = document.getElementById("statusFilter").value;
+        const systemFilter = document.getElementById("systemFilter").value;
+        const categoryFilter = document.getElementById("categoryFilter").value;
+        const sortFilter = document.getElementById("sortFilter").value;
+
+        filteredTickets = allTickets.filter(ticket => {
+            const matchesSearch = !searchTerm || 
+                ticket.title?.toLowerCase().includes(searchTerm) || 
+                ticket.ticketId?.toString().includes(searchTerm);
+            const matchesStatus = !statusFilter || ticket.status === statusFilter;
+            const matchesSystem = !systemFilter || ticket.systemName === systemFilter;
+            const matchesCategory = !categoryFilter || ticket.category === categoryFilter;
+            
+            return matchesSearch && matchesStatus && matchesSystem && matchesCategory;
+        });
+
+        // Apply sorting
+        if (sortFilter === 'newest') {
+            filteredTickets.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+        } else if (sortFilter === 'oldest') {
+            filteredTickets.sort((a, b) => new Date(a.createdDate) - new Date(b.createdDate));
+        } else if (sortFilter === 'title') {
+            filteredTickets.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        }
+
+        currentPage = 1;
+        displayTickets();
+    }
+
+    // Pagination functions
+    function nextPage() {
+        const maxPage = Math.ceil(filteredTickets.length / itemsPerPage);
+        if (currentPage < maxPage) {
+            currentPage++;
+            displayTickets();
+        }
+    }
+
+    function previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            displayTickets();
+        }
+    }
+
+    // Event listeners
+    document.getElementById("searchInput").addEventListener("input", applyFilters);
+    document.getElementById("statusFilter").addEventListener("change", applyFilters);
+    document.getElementById("systemFilter").addEventListener("change", applyFilters);
+    document.getElementById("categoryFilter").addEventListener("change", applyFilters);
+    document.getElementById("sortFilter").addEventListener("change", applyFilters);
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", function() {
+        loadStatistics();
+        loadTickets();
+    });
+</script>
+
+</body>
+</html>

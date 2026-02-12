@@ -1,0 +1,123 @@
+Using these
+
+CREATE TABLE ticket_tbl (
+	ticket_id INT PRIMARY KEY,
+	title VARCHAR(100),
+	author VARCHAR(50),
+	system_name VARCHAR(50),
+	category VARCHAR(50),
+	description VARCHAR(1000),
+	attachment_id INT,
+	status VARCHAR(20),
+	comment_id INT,
+	created_date DATE,
+	update_date DATE
+);
+
+CREATE TABLE ticket_systems_tbl (
+	system_id INT PRIMARY KEY,
+	system_name VARCHAR(50)
+);
+
+CREATE TABLE ticket_status_tbl (
+	status_id INT PRIMARY KEY,
+	status VARCHAR(20)
+);
+
+CREATE TABLE ticket_attachments_tbl (
+	attachment_id INT PRIMARY KEY,
+	ticket_id INT,
+	file_path VARCHAR(100),
+	FOREIGN KEY (ticket_id) REFERENCES ticket_tbl(ticket_id)
+);
+
+CREATE TABLE ticket_comments_tbl (
+	comment_id INT PRIMARY KEY,
+	ticket_id INT,
+	comments VARCHAR(500),
+	FOREIGN KEY (ticket_id) REFERENCES ticket_tbl(ticket_id)
+);
+
+create me 
+entity, controller,  repository, service
+
+
+__Ticket Management System - Complete Backend Structure Created!__
+
+I've successfully created all the entities, repositories, services, and controllers for your ticket management system based on your database schema.
+
+## 📊 Database Schema (Updated)
+
+- ✅ `database/init.sql` - Contains all 5 tables for the ticket system
+
+## 🎯 Created Files Summary
+
+### __Entities (5 classes)__
+
+1. ✅ `Ticket.java` - Main ticket entity with relationships
+2. ✅ `TicketSystem.java` - System/application entity
+3. ✅ `TicketStatus.java` - Status entity
+4. ✅ `TicketAttachment.java` - Attachment entity (Many-to-One with Ticket)
+5. ✅ `TicketComment.java` - Comment entity (Many-to-One with Ticket)
+
+### __Repositories (5 interfaces)__
+
+1. ✅ `TicketRepository.java` - With custom queries (findByAuthor, findByStatus, findBySystemName, findByCategory, search)
+2. ✅ `TicketSystemRepository.java` - With findBySystemName
+3. ✅ `TicketStatusRepository.java` - With findByStatus
+4. ✅ `TicketAttachmentRepository.java` - With findByTicket_TicketId
+5. ✅ `TicketCommentRepository.java` - With findByTicket_TicketId
+
+### __Services (5 classes)__
+
+1. ✅ `TicketService.java` - Full CRUD + search operations
+2. ✅ `TicketSystemService.java` - Full CRUD operations
+3. ✅ `TicketStatusService.java` - Full CRUD operations
+4. ✅ `TicketAttachmentService.java` - Full CRUD + get by ticket
+5. ✅ `TicketCommentService.java` - Full CRUD + get by ticket
+
+### __Controllers (5 REST APIs)__
+
+1. ✅ `TicketController.java` - `/api/tickets` - Full CRUD + filters
+2. ✅ `TicketSystemController.java` - `/api/systems` - Full CRUD
+3. ✅ `TicketStatusController.java` - `/api/statuses` - Full CRUD
+4. ✅ `TicketAttachmentController.java` - `/api/attachments` - Full CRUD
+5. ✅ `TicketCommentController.java` - `/api/comments` - Full CRUD
+
+## 🔗 API Endpoints Available
+
+__Tickets:__
+
+- `GET /api/tickets` - Get all tickets
+- `GET /api/tickets/{id}` - Get ticket by ID
+- `POST /api/tickets` - Create ticket
+- `PUT /api/tickets/{id}` - Update ticket
+- `DELETE /api/tickets/{id}` - Delete ticket
+- `GET /api/tickets/author/{author}` - Filter by author
+- `GET /api/tickets/status/{status}` - Filter by status
+- `GET /api/tickets/system/{systemName}` - Filter by system
+- `GET /api/tickets/category/{category}` - Filter by category
+- `GET /api/tickets/search?title=...` - Search by title
+
+__Systems:__ `/api/systems` - Full CRUD __Statuses:__ `/api/statuses` - Full CRUD __Attachments:__ `/api/attachments` + `/api/attachments/ticket/{ticketId}` __Comments:__ `/api/comments` + `/api/comments/ticket/{ticketId}`
+
+## 🚀 Next Steps
+
+1. __Configure Database:__
+
+   - Update `application.properties` with your PostgreSQL credentials
+   - Run `init.sql` to create tables
+
+2. __Run Backend:__
+
+   ```bash
+   cd backend
+   mvn spring-boot:run
+   ```
+
+3. __Test APIs:__
+
+   - Backend runs on: `http://localhost:8080`
+   - Test with Postman or curl
+
+All files follow best practices with proper JPA annotations, RESTful conventions, and CORS enabled for frontend integration!

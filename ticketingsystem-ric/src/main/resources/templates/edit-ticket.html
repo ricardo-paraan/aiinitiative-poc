@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Ticket - Ticketing Management System</title>
+    <link rel="stylesheet" href="/css/shadcn-styles.css">
+</head>
+<body>
+
+<div class="container">
+    <!-- Page Header ページヘッダー -->
+    <div class="page-header">
+        <h1 class="page-title">Edit Ticket</h1>
+        <p class="page-description">Update the ticket details below</p>
+    </div>
+    
+    <!-- Form Card チケット編集フォーム -->
+    <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-body">
+            <form id="ticketForm">
+                <!-- Hidden field for ticket ID チケットIDの隠しフィールド -->
+                <input type="hidden" id="ticketId" th:value="${ticket.ticketId}">
+                
+                <!-- Title field タイトルフィールド -->
+                <div class="form-group">
+                    <label for="title" class="form-label">
+                        Title <span class="text-destructive">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="title" 
+                        name="title" 
+                        th:value="${ticket.title}"
+                        placeholder="Enter ticket title"
+                        required>
+                    <p class="form-description">A brief, descriptive title for your ticket</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="author" class="form-label">
+                        Author <span class="text-destructive">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="author" 
+                        name="author" 
+                        th:value="${ticket.author}"
+                        placeholder="Enter your name"
+                        required>
+                    <p class="form-description">Your full name or username</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="systemName" class="form-label">
+                        System Name <span class="text-destructive">*</span>
+                    </label>
+                    <select class="form-select" id="systemsOptBody" name="systemName" required></select>
+                    <p class="form-description">The system or module this ticket relates to</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category" class="form-label">
+                        Category <span class="text-destructive">*</span>
+                    </label>
+                    <select class="form-select" id="category" name="category" required>
+                        <option value="">Select a category</option>
+                        <option value="Bug" th:selected="${ticket.category == 'Bug'}">Bug</option>
+                        <option value="Feature Request" th:selected="${ticket.category == 'Feature Request'}">Feature Request</option>
+                        <option value="Support" th:selected="${ticket.category == 'Support'}">Support</option>
+                        <option value="Enhancement" th:selected="${ticket.category == 'Enhancement'}">Enhancement</option>
+                        <option value="Other" th:selected="${ticket.category == 'Other'}">Other</option>
+                    </select>
+                    <p class="form-description">Choose the category that best describes your ticket</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description" class="form-label">
+                        Description <span class="text-destructive">*</span>
+                    </label>
+                    <textarea 
+                        class="form-textarea" 
+                        id="description" 
+                        name="description" 
+                        rows="6" 
+                        placeholder="Provide a detailed description of the issue or request..."
+                        required th:text="${ticket.description}"></textarea>
+                    <p class="form-description">Include as much detail as possible to help us understand and resolve your issue</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="status" class="form-label">
+                        Status <span class="text-destructive">*</span>
+                    </label>
+                    <select class="form-select" id="statusOptBody" name="status" required></select>
+                    <p class="form-description">Current status of the ticket</p>
+                </div>
+                
+                <div class="alert alert-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                    <span class="text-sm">Fields marked with <span class="text-destructive">*</span> are required</span>
+                </div>
+                
+                <div class="flex gap-2" style="margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Update Ticket
+                    </button>
+                    <a href="/" class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                            <path d="m12 19-7-7 7-7"></path>
+                            <path d="M19 12H5"></path>
+                        </svg>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    // Get ticket data from Thymeleaf Thymeleafからチケットデータを取得
+    const ticketData = {
+        ticketId: /*[[${ticket.ticketId}]]*/ 0,
+        attachmentId: /*[[${ticket.attachmentId}]]*/ 0,
+        commentId: /*[[${ticket.commentId}]]*/ 0
+    };
+
+    // Initialize page on load ページ読み込み時に初期化
+    document.addEventListener("DOMContentLoaded", () => {
+        loadTicketStatus();
+        loadTicketSystems();
+    });
+
+    // API endpoints APIエンドポイント
+    const GET_STATUS = "http://localhost:8080/api/tickets-status";
+    const GET_SYSTEMS = "http://localhost:8080/api/tickets-systems";
+
+    // Load ticket status options and set current value チケットステータスオプションを読み込み、現在の値を設定
+    async function loadTicketStatus() {
+        const response = await fetch(GET_STATUS);
+        const ticketStatus = await response.json();
+
+        const optBody = document.getElementById("statusOptBody");
+        const currentStatus = /*[[${ticket.status}]]*/ '';
+        optBody.innerHTML = "";
+
+        if (ticketStatus.length === 0) {
+            optBody.innerHTML = `<option value="">No status available</option>`;
+            return;
+        }
+
+        ticketStatus.forEach((s) => {
+            const option = document.createElement("option");
+            option.value = s.status;
+            option.textContent = s.status;
+            // Set selected if this is the current ticket's status
+            if (s.status === currentStatus) {
+                option.selected = true;
+            }
+            optBody.appendChild(option);
+        });
+    }
+
+    async function loadTicketSystems() {
+        const response = await fetch(GET_SYSTEMS);
+        const ticketSystems = await response.json();
+
+        const optBody = document.getElementById("systemsOptBody");
+        const currentSystem = /*[[${ticket.systemName}]]*/ '';
+        optBody.innerHTML = "";
+
+        if (ticketSystems.length === 0) {
+            optBody.innerHTML = `<option value="">No systems available</option>`;
+            return;
+        }
+
+        ticketSystems.forEach((s) => {
+            const option = document.createElement("option");
+            option.value = s.systemName;
+            option.textContent = s.systemName;
+            // Set selected if this is the current ticket's system
+            if (s.systemName === currentSystem) {
+                option.selected = true;
+            }
+            optBody.appendChild(option);
+        });
+    }
+
+    document.getElementById('ticketForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Disable submit button to prevent double submission
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="loading"></span> Updating...';
+        
+        const ticketId = document.getElementById('ticketId').value;
+        
+        const formData = {
+            title: document.getElementById('title').value,
+            author: document.getElementById('author').value,
+            systemName: document.getElementById('systemsOptBody').value,
+            category: document.getElementById('category').value,
+            description: document.getElementById('description').value,
+            status: document.getElementById('statusOptBody').value,
+            attachmentId: ticketData.attachmentId,
+            commentId: ticketData.commentId
+        };
+        
+        try {
+            const response = await fetch(`/api/tickets/${ticketId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (response.ok) {
+                const ticket = await response.json();
+
+                const GET_LATEST_STATUS = `http://localhost:8080/api/tickets/${ticket.ticketId}/latest-status`;
+                const latestStatResponse = await fetch(GET_LATEST_STATUS);
+
+                if (latestStatResponse.ok) {
+                    const latestTickStatus = await latestStatResponse.json();
+                    
+                    if (latestTickStatus.status !== formData.status) {
+                        const createStatusHistoryResponse = await fetch(`/api/tickets/${ticket.ticketId}/status-history`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({status : document.getElementById('statusOptBody').value})
+                        });
+                    }
+                }
+                
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert';
+                alertDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background-color: hsl(var(--success) / 0.1); border-color: hsl(var(--success) / 0.2); color: hsl(var(--success)); padding: 1rem; border-radius: var(--radius); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); z-index: 1000;';
+                alertDiv.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Ticket updated successfully! Redirecting...
+                `;
+                document.body.appendChild(alertDiv);
+                
+                // Redirect after a short delay
+                setTimeout(() => {
+                    window.location.href = '/tickets/' + ticket.ticketId;
+                }, 1500);
+            } else {
+                throw new Error('Failed to update ticket');
+            }
+        } catch (error) {
+            console.error('Error updating ticket:', error);
+            
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            
+            // Show error message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert';
+            alertDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background-color: hsl(var(--destructive) / 0.1); border-color: hsl(var(--destructive) / 0.2); color: hsl(var(--destructive)); padding: 1rem; border-radius: var(--radius); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); z-index: 1000;';
+            alertDiv.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                Failed to update ticket. Please try again.
+            `;
+            document.body.appendChild(alertDiv);
+            
+            // Remove alert after 5 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    });
+</script>
+</body>
+</html>

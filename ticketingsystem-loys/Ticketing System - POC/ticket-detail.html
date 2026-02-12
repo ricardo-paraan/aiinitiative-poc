@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Details - Ticketing System</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ticket-detail.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-left">
+                <button class="btn-back" onclick="window.location.href='index.html'">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Back to Dashboard
+                </button>
+            </div>
+            <div class="header-right">
+                <button class="btn-secondary view-as-user">
+                    View as User
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Ticket Header -->
+        <div class="ticket-header">
+            <div class="ticket-id-status">
+                <h1 class="ticket-id" id="ticketId">#001</h1>
+                <span class="status-badge" id="ticketStatus">in progress</span>
+            </div>
+            <h2 class="ticket-title" id="ticketTitle">EC2 instance performance issue</h2>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-layout">
+            <!-- Left Column -->
+            <div class="main-content">
+                <!-- Ticket Details Section -->
+                <section class="card">
+                    <h3 class="section-title">Ticket Details</h3>
+                    
+                    <div class="detail-section">
+                        <h4 class="detail-label">Description</h4>
+                        <p class="detail-text" id="ticketDescription">
+                            Instance t2 micro is running slower than expected. CPU utilization is constantly at 80%. This has been affecting our production environment since yesterday.
+                        </p>
+                    </div>
+
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <h4 class="detail-label">System</h4>
+                            <p class="detail-value" id="ticketSystem">AWS</p>
+                        </div>
+                        <div class="detail-item">
+                            <h4 class="detail-label">Category</h4>
+                            <p class="detail-value" id="ticketCategory">Technical Issue</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Status History Section -->
+                <section class="card">
+                    <h3 class="section-title">Status History</h3>
+                    <div class="status-timeline" id="statusHistory">
+                        <!-- Timeline items will be inserted here -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="status-badge status-open">open</span>
+                                    <span class="timeline-date">Nov 16, 2024 at 9:30 AM</span>
+                                </div>
+                                <p class="timeline-text">Ticket created</p>
+                                <p class="timeline-author">by System</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Attachments Section -->
+                <section class="card">
+                    <div class="section-header">
+                        <h3 class="section-title">Attachments</h3>
+                        <button class="btn-secondary btn-sm" id="addAttachmentBtn">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Add Attachment
+                        </button>
+                    </div>
+                    <div class="attachments-list" id="attachmentsList">
+                        <!-- Attachments will be inserted here -->
+                        <div class="empty-state">
+                            <p>No attachments yet</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Comments Section -->
+                <section class="card">
+                    <h3 class="section-title">Comments & Updates</h3>
+                    
+                    <div class="comments-list" id="commentsList">
+                        <!-- Comments will be inserted here -->
+                    </div>
+
+                    <!-- Add Comment Form -->
+                    <div class="comment-form">
+                        <div class="comment-input-wrapper">
+                            <textarea 
+                                id="commentInput" 
+                                class="comment-input" 
+                                placeholder="Add a comment..."
+                                rows="3"
+                                maxlength="1000"
+                            ></textarea>
+                            <div class="comment-footer">
+                                <span class="char-counter">
+                                    <span id="commentCharCount">0</span>/1000 characters
+                                </span>
+                                <div class="comment-actions">
+                                    <button class="btn-secondary" id="cancelCommentBtn">Cancel</button>
+                                    <button class="btn-primary" id="addCommentBtn">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <path d="M2 8L14 8M14 8L8 2M14 8L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Add Comment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Sidebar -->
+            <aside class="sidebar">
+                <!-- Details Card -->
+                <div class="card">
+                    <h3 class="section-title">Details</h3>
+                    
+                    <div class="sidebar-detail">
+                        <p class="sidebar-label">Submitted By</p>
+                        <p class="sidebar-value" id="submittedBy">John Smith</p>
+                        <p class="sidebar-email" id="submittedEmail">john.smith@company.com</p>
+                    </div>
+
+                    <div class="sidebar-detail">
+                        <p class="sidebar-label">Date Submitted</p>
+                        <p class="sidebar-value" id="dateSubmitted">Nov 16, 2024 at 9:30 AM</p>
+                    </div>
+
+                    <div class="sidebar-detail">
+                        <p class="sidebar-label">Last Updated</p>
+                        <p class="sidebar-value" id="lastUpdated">Nov 17, 2024 at 2:45 PM</p>
+                    </div>
+
+                    <div class="sidebar-detail">
+                        <p class="sidebar-label">Status</p>
+                        <span class="status-badge" id="sidebarStatus">in progress</span>
+                    </div>
+                </div>
+
+                <!-- Actions Card -->
+                <div class="card">
+                    <h3 class="section-title">Actions</h3>
+                    
+                    <button class="action-btn" id="markCompletedBtn">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M16.25 5L7.5 13.75L3.75 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Mark as completed
+                    </button>
+
+                    <button class="action-btn" id="contactSupportBtn">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M17.5 12.5C17.5 13.163 17.2366 13.7989 16.7678 14.2678C16.2989 14.7366 15.663 15 15 15H5L2.5 17.5V5C2.5 4.33696 2.76339 3.70107 3.23223 3.23223C3.70107 2.76339 4.33696 2.5 5 2.5H15C15.663 2.5 16.2989 2.76339 16.7678 3.23223C17.2366 3.70107 17.5 4.33696 17.5 5V12.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Contact Support
+                    </button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- File Upload Modal -->
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Attachment</h3>
+                <button class="modal-close" id="closeUploadModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="file-upload-area" id="fileUploadArea">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 32V16M24 16L18 22M24 16L30 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M40 32V40H8V32" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p>Drag and drop files here or click to browse</p>
+                    <p class="file-hint">Maximum file size: 5MB</p>
+                    <input type="file" id="fileInput" multiple hidden>
+                </div>
+                <div id="selectedFiles" class="selected-files"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelUploadBtn">Cancel</button>
+                <button class="btn-primary" id="uploadFilesBtn">Upload Files</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ticket-detail.js"></script>
+</body>
+</html>

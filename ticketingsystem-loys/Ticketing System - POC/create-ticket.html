@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Ticket - Ticketing System</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/forms.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Back Button -->
+        <header class="page-header">
+            <button class="btn-back" onclick="window.location.href='index.html'">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back to Dashboard
+            </button>
+        </header>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Create New Ticket</h1>
+                <p class="form-subtitle">Submit a new support ticket for your issue or request</p>
+            </div>
+
+            <form id="createTicketForm" class="ticket-form">
+                <!-- Ticket Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Ticket Information</h2>
+
+                    <!-- Title Field -->
+                    <div class="form-group">
+                        <label for="title" class="form-label">
+                            Title <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="title" 
+                            name="title" 
+                            class="form-input" 
+                            placeholder="Brief description of the issue"
+                            maxlength="80"
+                            required
+                        />
+                        <div class="char-counter">
+                            <span id="titleCounter">0</span>/80 characters
+                        </div>
+                    </div>
+
+                    <!-- System Field -->
+                    <div class="form-group">
+                        <label for="system" class="form-label">
+                            System <span class="required">*</span>
+                        </label>
+                        <select id="system" name="system" class="form-select" required>
+                            <option value="">Select the system related to your issue</option>
+                        </select>
+                    </div>
+
+                    <!-- Category Field -->
+                    <div class="form-group">
+                        <label for="category" class="form-label">
+                            Category <span class="required">*</span>
+                        </label>
+                        <select id="category" name="category" class="form-select" required>
+                            <option value="">Select a system first</option>
+                        </select>
+                    </div>
+
+                    <!-- Description Field -->
+                    <div class="form-group">
+                        <label for="description" class="form-label">
+                            Description <span class="required">*</span>
+                        </label>
+                        <textarea 
+                            id="description" 
+                            name="description" 
+                            class="form-textarea" 
+                            placeholder="Provide a detailed description of your issue or request. Include any relevant information that might help us resolve your ticket faster."
+                            maxlength="5000"
+                            rows="6"
+                            required
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="descCounter">0</span>/5000 characters
+                        </div>
+                    </div>
+
+                    <!-- Attachments Field -->
+                    <div class="form-group">
+                        <label for="attachments" class="form-label">
+                            Attachments (Optional)
+                        </label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <div class="upload-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                            </div>
+                            <p class="upload-text">Click to upload or drag and drop</p>
+                            <p class="upload-hint">PDF, DOC, PNG, JPG, TXT, XLSX (Max 5MB per file)</p>
+                            <input 
+                                type="file" 
+                                id="attachments" 
+                                name="attachments" 
+                                class="file-input" 
+                                multiple
+                                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt,.xlsx,.xls"
+                            />
+                            <button type="button" class="btn-choose-files" onclick="document.getElementById('attachments').click()">
+                                Choose Files
+                            </button>
+                        </div>
+                        <div id="fileList" class="file-list"></div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span class="btn-text">Submit Ticket</span>
+                        <span class="btn-loading" style="display: none;">
+                            <span class="spinner"></span>
+                            Submitting...
+                        </span>
+                    </button>
+                    <button type="button" class="btn-cancel" onclick="window.location.href='index.html'">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal" style="display: none;">
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+            </div>
+            <h2>Ticket Created Successfully!</h2>
+            <p>Your ticket has been submitted and assigned ID: <strong id="ticketId"></strong></p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="window.location.href='index.html'">
+                    View My Tickets
+                </button>
+                <button class="btn-secondary" onclick="window.location.href='create-ticket.html'">
+                    Create Another Ticket
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/create-ticket.js"></script>
+</body>
+</html>

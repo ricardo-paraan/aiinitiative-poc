@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ticketing Management System</title>
+    <link rel="stylesheet" href="/css/shadcn-styles.css">
+</head>
+<body>
+
+<div class="container">
+    <!-- Page Header ページヘッダー -->
+    <div class="page-header">
+        <h1 class="page-title">Ticketing Management System</h1>
+        <p class="page-description">Manage and track all your support tickets in one place</p>
+    </div>
+
+    <!-- Action Button 新規チケット作成ボタン -->
+    <div class="mb-6">
+        <a class="btn btn-primary" href="/tickets/create">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+            </svg>
+            Create New Ticket
+        </a>
+    </div>
+
+    <!-- Ticket Status Cards チケットステータスカード（保留中、進行中、解決済みの統計） -->
+    <div class="grid grid-cols-3 mb-8">
+        <!-- Pending tickets card 保留中のチケットカード -->
+        <div class="stats-card warning">
+            <div class="stats-card-title">Pending Tickets</div>
+            <div class="stats-card-value" id="pendingTickets">
+                <span class="loading"></span>
+            </div>
+        </div>
+        <!-- Ongoing tickets card 進行中のチケットカード -->
+        <div class="stats-card info">
+            <div class="stats-card-title">Ongoing Tickets</div>
+            <div class="stats-card-value" id="ongoingTickets">
+                <span class="loading"></span>
+            </div>
+        </div>
+        <!-- Resolved tickets card 解決済みのチケットカード -->
+        <div class="stats-card success">
+            <div class="stats-card-title">Resolved Tickets</div>
+            <div class="stats-card-value" id="resolvedTickets">
+                <span class="loading"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tickets Table すべてのチケットを表示するテーブル -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">All Tickets</h3>
+        </div>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <!-- Table body populated by JavaScript JavaScriptによって入力されるテーブル本体 -->
+                <tbody id="ticketTableBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem;">
+                            <span class="loading" style="width: 2rem; height: 2rem;"></span>
+                            <p style="margin-top: 1rem; color: hsl(var(--muted-foreground));">Loading tickets...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize page on load ページ読み込み時に初期化
+    document.addEventListener("DOMContentLoaded", () => {
+        loadPending();
+        loadOngoing();
+        loadResolved();
+        loadTickets();
+    });
+
+    // API endpoints APIエンドポイント
+    const pendingURL = "http://localhost:8080/api/pendingstatus";
+    const ongoingURL = "http://localhost:8080/api/ongoingstatus";
+    const resolvedURL = "http://localhost:8080/api/resolvedstatus";
+    const API_URL = "http://localhost:8080/api/tickets";
+
+    // Load pending tickets count 保留中のチケット数を読み込む
+    async function loadPending() {
+        try {
+            const response = await fetch(pendingURL);
+            const pendingTicks = await response.json();
+            const pendingElement = document.getElementById("pendingTickets");
+            pendingElement.textContent = pendingTicks;
+        } catch (err) {
+            console.error("Failed to fetch pending tickets:", err);
+            document.getElementById("pendingTickets").textContent = "0";
+        }
+    }
+
+    // Load ongoing tickets count 進行中のチケット数を読み込む
+    async function loadOngoing() {
+        try {
+            const response = await fetch(ongoingURL);
+            const ongoingTicks = await response.json();
+            const ongoingElement = document.getElementById("ongoingTickets");
+            ongoingElement.textContent = ongoingTicks;
+        } catch (err) {
+            console.error("Failed to fetch ongoing tickets:", err);
+            document.getElementById("ongoingTickets").textContent = "0";
+        }
+    }
+
+    // Load resolved tickets count 解決済みのチケット数を読み込む
+    async function loadResolved() {
+        try {
+            const response = await fetch(resolvedURL);
+            const resolvedTicks = await response.json();
+            const resolvedElement = document.getElementById("resolvedTickets");
+            resolvedElement.textContent = resolvedTicks;
+        } catch (err) {
+            console.error("Failed to fetch resolved tickets:", err);
+            document.getElementById("resolvedTickets").textContent = "0";
+        }
+    }
+
+    // Load all tickets and populate table すべてのチケットを読み込んでテーブルに表示
+    async function loadTickets() {
+        try {
+            const response = await fetch(API_URL);
+            const tickets = await response.json();
+
+            const tbody = document.getElementById("ticketTableBody");
+            tbody.innerHTML = "";
+
+            if (tickets.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem;">
+                            <p style="color: hsl(var(--muted-foreground));">No tickets found. Create your first ticket to get started.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Create table row for each ticket 各チケットのテーブル行を作成
+            tickets.forEach(ticket => {
+                const row = document.createElement("tr");
+
+                // Truncate description if too long 説明が長すぎる場合は切り詰める
+                const description = ticket.description.length > 100
+                    ? ticket.description.substring(0, 100) + '...'
+                    : ticket.description;
+
+                row.innerHTML = `
+                    <td><a href="/tickets/${ticket.ticketId}">${escapeHtml(ticket.title)}</a></td>
+                    <td>${escapeHtml(ticket.author)}</td>
+                    <td>${escapeHtml(description)}</td>
+                    <td><span class="badge ${getStatusBadgeClass(ticket.status)}">${ticket.status}</span></td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="/tickets/edit/${ticket.ticketId}" class="btn btn-outline btn-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                                    <path d="m15 5 4 4"></path>
+                                </svg>
+                                Edit
+                            </a>
+                            <button class="btn btn-destructive btn-sm" onclick="confirmDelete(${ticket.ticketId})">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <path d="M3 6h18"></path>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+        } catch (err) {
+            console.error("Failed to fetch tickets:", err);
+            const tbody = document.getElementById("ticketTableBody");
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 2rem;">
+                        <p style="color: hsl(var(--destructive));">Failed to load tickets. Please try again.</p>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    // Get CSS class for status badge ステータスバッジのCSSクラスを取得
+    function getStatusBadgeClass(status) {
+        switch(status) {
+            case 'PENDING':
+                return 'badge-warning';
+            case 'ONGOING':
+                return 'badge-info';
+            case 'RESOLVED':
+                return 'badge-success';
+            default:
+                return 'badge-secondary';
+        }
+    }
+
+    // Show confirmation dialog before deleting ticket チケット削除前に確認ダイアログを表示
+    function confirmDelete(ticketId) {
+        if (confirm('Are you sure you want to delete this ticket? This action cannot be undone.')) {
+            deleteTicket(ticketId);
+        }
+    }
+
+    // Delete ticket and refresh data チケットを削除してデータを更新
+    async function deleteTicket(ticketId) {
+        try {
+            const response = await fetch(`/api/tickets/${ticketId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert('Ticket deleted successfully!');
+                loadTickets(); // Reload the ticket list チケットリストを再読み込み
+                loadPending(); // Reload stats 統計を再読み込み
+                loadOngoing();
+                loadResolved();
+            } else {
+                alert('Failed to delete ticket. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error deleting ticket:', error);
+            alert('An error occurred while deleting the ticket.');
+        }
+    }
+
+    // Escape HTML special characters to prevent XSS XSS攻撃を防ぐためにHTML特殊文字をエスケープ
+    function escapeHtml(text) {
+        const map = {
+            '&': '&',
+            '<': '<',
+            '>': '>',
+            '"': '"',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, m => map[m]);
+    }
+</script>
+</body>
+</html>

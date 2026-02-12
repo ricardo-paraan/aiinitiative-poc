@@ -1,0 +1,11 @@
+you created too much. I just said build me a template for a java + javascript + postgre project
+
+I understand - I created a full implementation when you just wanted a basic template structure. Let me simplify this to just a minimal template.
+
+yes. stripdown and basic configuration files only
+
+I'll strip down the project to just basic configuration files and minimal templates.
+
+I need to work one file at a time. Let me simplify the backend Application.java first:
+
+Good! Now let me remove the extra backend implementation directories:

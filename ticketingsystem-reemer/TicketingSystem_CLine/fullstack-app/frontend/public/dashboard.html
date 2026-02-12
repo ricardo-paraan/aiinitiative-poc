@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Management Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <h1>🎫 Ticket Management Dashboard</h1>
+            <p>View and manage all support tickets</p>
+        </header>
+
+        <div id="errorBanner" class="error-banner">
+            ⚠️ <span id="errorMessage"></span>
+        </div>
+
+        <div class="dashboard-controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search tickets by title, author, or status...">
+            </div>
+            <div class="ticket-count">
+                Total Tickets: <strong id="ticketCount">0</strong>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading tickets...</p>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+            <h2>📭 No Tickets Found</h2>
+            <p id="emptyMessage">No tickets available.</p>
+        </div>
+
+        <div id="ticketsGrid" class="tickets-grid"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

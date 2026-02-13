@@ -1,0 +1,45 @@
+{
+  "name": "ticketing-system-frontend-tests",
+  "version": "1.0.0",
+  "description": "Frontend unit tests for Ticketing System using Jest and jsdom",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "test:dashboard": "jest __tests__/dashboard.test.js",
+    "test:ticket-list": "jest __tests__/ticket-list.test.js",
+    "test:filter-search": "jest __tests__/filter-search.test.js",
+    "test:create-ticket": "jest __tests__/create-ticket.test.js",
+    "test:ticket-detail": "jest __tests__/ticket-detail.test.js",
+    "test:add-comment": "jest __tests__/add-comment.test.js",
+    "test:navigation": "jest __tests__/navigation.test.js",
+    "test:us1": "jest __tests__/dashboard.test.js",
+    "test:us2": "jest __tests__/ticket-list.test.js",
+    "test:us3": "jest __tests__/filter-search.test.js -t 'US3'",
+    "test:us4": "jest __tests__/filter-search.test.js -t 'US4'",
+    "test:us3-us4": "jest __tests__/filter-search.test.js",
+    "test:us5": "jest __tests__/create-ticket.test.js",
+    "test:us6": "jest __tests__/ticket-detail.test.js",
+    "test:us5-us6": "jest __tests__/create-ticket.test.js __tests__/ticket-detail.test.js",
+    "test:us7": "jest __tests__/add-comment.test.js",
+    "test:us8": "jest __tests__/navigation.test.js",
+    "test:ci": "jest --ci --coverage --maxWorkers=2"
+  },
+  "keywords": [
+    "testing",
+    "jest",
+    "frontend",
+    "unit-tests"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  }
+}

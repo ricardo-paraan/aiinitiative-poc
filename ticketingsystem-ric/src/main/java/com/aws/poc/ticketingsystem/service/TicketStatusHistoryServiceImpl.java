@@ -34,8 +34,9 @@ public class TicketStatusHistoryServiceImpl implements TicketStatusHistoryServic
      * @param ticketStatusHistoryRepo The status history repository ステータス履歴リポジトリ
      */
     @Autowired
-    public TicketStatusHistoryServiceImpl(TicketStatusHistoryRepository ticketStatusHistoryRepo) {
+    public TicketStatusHistoryServiceImpl(TicketStatusHistoryRepository ticketStatusHistoryRepo, TicketRepository ticketRepository) {
         this.ticketStatusHistoryRepo = ticketStatusHistoryRepo;
+        this.ticketRepository = ticketRepository;
     }
 
     /**
@@ -56,8 +57,8 @@ public class TicketStatusHistoryServiceImpl implements TicketStatusHistoryServic
      * @return The created status history entry 作成されたステータス履歴エントリ
      * @throws RuntimeException if ticket not found チケットが見つからない場合
      */
-    @Transactional
     @Override
+    @Transactional
     public TicketStatusHistoryTbl addStatusHistoryToTicket(Integer ticketId, String status) {
         // Find the ticket or throw exception チケットを検索するか、例外をスローします
         TicketTbl ticket = ticketRepository.findById(ticketId)

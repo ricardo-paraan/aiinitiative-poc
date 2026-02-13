@@ -3,6 +3,10 @@ package com.fullstack.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing comments on tickets with automatic timestamp creation.
+ * 自動タイムスタンプ作成機能を持つチケットのコメントを表すエンティティ。
+ */
 @Entity
 @Table(name = "ticket_comments_tbl")
 public class TicketComment {
@@ -35,6 +39,10 @@ public class TicketComment {
         this.createdAt = LocalDateTime.now();
     }
     
+    /**
+     * Automatically sets creation timestamp before persisting.
+     * 永続化前に作成タイムスタンプを自動設定します。
+     */
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {

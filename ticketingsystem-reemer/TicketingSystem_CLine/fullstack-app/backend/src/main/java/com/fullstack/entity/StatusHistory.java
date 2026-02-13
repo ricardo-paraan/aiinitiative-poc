@@ -3,6 +3,10 @@ package com.fullstack.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity tracking historical status changes for tickets with timestamps and user information.
+ * タイムスタンプとユーザー情報を含むチケットの履歴ステータス変更を追跡するエンティティ。
+ */
 @Entity
 @Table(name = "status_history")
 public class StatusHistory {

@@ -8,6 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service layer for ticket business logic with automatic status history tracking.
+ * 自動ステータス履歴追跡機能を持つチケットビジネスロジックのサービス層。
+ */
 @Service
 public class TicketService {
     
@@ -27,13 +31,15 @@ public class TicketService {
         return ticketRepository.findById(id);
     }
     
-    // Create new ticket
+    /**
+     * Creates ticket and records initial status in history.
+     * チケットを作成し、初期ステータスを履歴に記録します。
+     */
     public Ticket createTicket(Ticket ticket) {
         ticket.setCreatedDate(LocalDate.now());
         ticket.setUpdateDate(LocalDate.now());
         Ticket savedTicket = ticketRepository.save(ticket);
         
-        // Create initial status history entry
         statusHistoryService.createStatusHistory(
             savedTicket,
             savedTicket.getStatus(),
@@ -44,13 +50,15 @@ public class TicketService {
         return savedTicket;
     }
     
-    // Update ticket
+    /**
+     * Updates ticket and creates history entry when status or comment changes.
+     * チケットを更新し、ステータスまたはコメントが変更された場合は履歴エントリを作成します。
+     */
     public Ticket updateTicket(Integer id, Ticket ticketDetails) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
         if (ticket.isPresent()) {
             Ticket existingTicket = ticket.get();
             
-            // Check if status or status comment changed
             boolean statusChanged = !existingTicket.getStatus().equals(ticketDetails.getStatus()) ||
                                    (existingTicket.getStatusComment() == null && ticketDetails.getStatusComment() != null) ||
                                    (existingTicket.getStatusComment() != null && !existingTicket.getStatusComment().equals(ticketDetails.getStatusComment()));

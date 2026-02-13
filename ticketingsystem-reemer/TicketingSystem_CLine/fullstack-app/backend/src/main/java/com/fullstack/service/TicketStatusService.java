@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service layer for ticket status management operations.
+ * チケットステータス管理操作のサービス層。
+ */
 @Service
 public class TicketStatusService {
     

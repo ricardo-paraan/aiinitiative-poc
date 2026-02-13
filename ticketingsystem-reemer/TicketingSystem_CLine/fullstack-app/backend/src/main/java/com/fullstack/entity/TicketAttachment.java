@@ -2,6 +2,10 @@ package com.fullstack.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity representing file attachments associated with tickets.
+ * チケットに関連付けられたファイル添付を表すエンティティ。
+ */
 @Entity
 @Table(name = "ticket_attachments_tbl")
 public class TicketAttachment {

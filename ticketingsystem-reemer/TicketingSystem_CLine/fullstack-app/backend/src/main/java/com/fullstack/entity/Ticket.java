@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Entity representing a support ticket with status tracking and relationships to comments and attachments.
+ * ステータス追跡、コメント、添付ファイルとの関係を持つサポートチケットを表すエンティティ。
+ */
 @Entity
 @Table(name = "ticket_tbl")
 @JsonIgnoreProperties({"attachments", "comments"})

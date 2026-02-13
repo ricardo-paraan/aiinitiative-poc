@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST controller for ticket attachment management.
+ * チケット添付ファイル管理のRESTコントローラー。
+ */
 @RestController
 @RequestMapping("/api/attachments")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,7 +37,10 @@ public class TicketAttachmentController {
                         .orElse(ResponseEntity.notFound().build());
     }
     
-    // Get attachments by ticket ID
+    /**
+     * Retrieves all attachments for a specific ticket.
+     * 特定のチケットのすべての添付ファイルを取得します。
+     */
     @GetMapping("/ticket/{ticketId}")
     public ResponseEntity<List<TicketAttachment>> getAttachmentsByTicketId(@PathVariable Integer ticketId) {
         List<TicketAttachment> attachments = ticketAttachmentService.getAttachmentsByTicketId(ticketId);

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST controller for ticket comment management.
+ * チケットコメント管理のRESTコントローラー。
+ */
 @RestController
 @RequestMapping("/api/comments")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,7 +37,10 @@ public class TicketCommentController {
                       .orElse(ResponseEntity.notFound().build());
     }
     
-    // Get comments by ticket ID
+    /**
+     * Retrieves all comments for a specific ticket.
+     * 特定のチケットのすべてのコメントを取得します。
+     */
     @GetMapping("/ticket/{ticketId}")
     public ResponseEntity<List<TicketComment>> getCommentsByTicketId(@PathVariable Integer ticketId) {
         List<TicketComment> comments = ticketCommentService.getCommentsByTicketId(ticketId);

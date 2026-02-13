@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service layer for ticket comment management operations.
+ * チケットコメント管理操作のサービス層。
+ */
 @Service
 public class TicketCommentService {
     
@@ -33,7 +37,10 @@ public class TicketCommentService {
         return ticketCommentRepository.save(comment);
     }
     
-    // Update comment
+    /**
+     * Updates comment, preserving author if not provided in update.
+     * コメントを更新し、更新時に提供されない場合は作成者を保持します。
+     */
     public TicketComment updateComment(Integer id, TicketComment commentDetails) {
         Optional<TicketComment> comment = ticketCommentRepository.findById(id);
         if (comment.isPresent()) {

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST controller for ticket management operations.
+ * チケット管理操作のRESTコントローラー。
+ */
 @RestController
 @RequestMapping("/api/tickets")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,14 +37,20 @@ public class TicketController {
                      .orElse(ResponseEntity.notFound().build());
     }
     
-    // Create new ticket
+    /**
+     * Creates a new ticket with initial status history.
+     * 初期ステータス履歴を持つ新しいチケットを作成します。
+     */
     @PostMapping
     public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
         Ticket createdTicket = ticketService.createTicket(ticket);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTicket);
     }
     
-    // Update ticket
+    /**
+     * Updates ticket and records status history if status changes.
+     * チケットを更新し、ステータスが変更された場合は履歴を記録します。
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Ticket> updateTicket(@PathVariable Integer id, @RequestBody Ticket ticket) {
         Ticket updatedTicket = ticketService.updateTicket(id, ticket);
@@ -60,35 +70,50 @@ public class TicketController {
         return ResponseEntity.notFound().build();
     }
     
-    // Get tickets by author
+    /**
+     * Retrieves tickets filtered by author name.
+     * 作成者名でフィルタリングされたチケットを取得します。
+     */
     @GetMapping("/author/{author}")
     public ResponseEntity<List<Ticket>> getTicketsByAuthor(@PathVariable String author) {
         List<Ticket> tickets = ticketService.getTicketsByAuthor(author);
         return ResponseEntity.ok(tickets);
     }
     
-    // Get tickets by status
+    /**
+     * Retrieves tickets filtered by status.
+     * ステータスでフィルタリングされたチケットを取得します。
+     */
     @GetMapping("/status/{status}")
     public ResponseEntity<List<Ticket>> getTicketsByStatus(@PathVariable String status) {
         List<Ticket> tickets = ticketService.getTicketsByStatus(status);
         return ResponseEntity.ok(tickets);
     }
     
-    // Get tickets by system name
+    /**
+     * Retrieves tickets filtered by system name.
+     * システム名でフィルタリングされたチケットを取得します。
+     */
     @GetMapping("/system/{systemName}")
     public ResponseEntity<List<Ticket>> getTicketsBySystemName(@PathVariable String systemName) {
         List<Ticket> tickets = ticketService.getTicketsBySystemName(systemName);
         return ResponseEntity.ok(tickets);
     }
     
-    // Get tickets by category
+    /**
+     * Retrieves tickets filtered by category.
+     * カテゴリでフィルタリングされたチケットを取得します。
+     */
     @GetMapping("/category/{category}")
     public ResponseEntity<List<Ticket>> getTicketsByCategory(@PathVariable String category) {
         List<Ticket> tickets = ticketService.getTicketsByCategory(category);
         return ResponseEntity.ok(tickets);
     }
     
-    // Search tickets by title
+    /**
+     * Searches tickets by title using case-insensitive partial matching.
+     * 大文字小文字を区別しない部分一致でチケットをタイトル検索します。
+     */
     @GetMapping("/search")
     public ResponseEntity<List<Ticket>> searchTickets(@RequestParam String title) {
         List<Ticket> tickets = ticketService.searchTicketsByTitle(title);

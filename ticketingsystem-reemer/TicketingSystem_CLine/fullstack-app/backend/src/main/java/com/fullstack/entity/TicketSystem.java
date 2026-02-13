@@ -2,6 +2,10 @@ package com.fullstack.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity representing available ticket systems or categories.
+ * 利用可能なチケットシステムまたはカテゴリを表すエンティティ。
+ */
 @Entity
 @Table(name = "ticket_systems_tbl")
 public class TicketSystem {

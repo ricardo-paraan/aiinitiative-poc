@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST controller for ticket status management.
+ * チケットステータス管理のRESTコントローラー。
+ */
 @RestController
 @RequestMapping("/api/statuses")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,7 +37,10 @@ public class TicketStatusController {
                      .orElse(ResponseEntity.notFound().build());
     }
     
-    // Get status by name
+    /**
+     * Retrieves status by exact name match.
+     * 完全一致する名前でステータスを取得します。
+     */
     @GetMapping("/name/{name}")
     public ResponseEntity<TicketStatus> getStatusByName(@PathVariable String name) {
         Optional<TicketStatus> status = ticketStatusService.getStatusByName(name);

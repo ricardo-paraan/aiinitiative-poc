@@ -1,0 +1,63 @@
+Generate JavaDoc comments for this Java code.
+
+Rules:
+
+Add JavaDoc only to public classes, interfaces, and public methods.
+
+Explain purpose and non-obvious behavior only.
+
+Keep comments short and practical.
+
+Do not document getters, setters, private methods, or obvious code.
+
+Use @param, @return, and @throws only when necessary.
+
+Do not repeat the method name in the description.
+
+Assume this is production Spring Boot code.
+
+Output only the updated code with JavaDocs added.
+
+if its possible to compact it to 1 or 2 lines.
+also add japanese translated. same condition applies.
+
+
+
+
+Successfully added JavaDoc comments to all Java files in the Spring Boot ticketing system. The documentation follows the specified rules:
+
+Summary of Changes:
+
+✅ Controllers (7 files):
+
+Application.java - Entry point documentation
+TicketController.java - REST endpoints with key methods documented
+TicketStatusController.java - Status management endpoints
+TicketSystemController.java - System management endpoints
+TicketCommentController.java - Comment management endpoints
+TicketAttachmentController.java - Attachment management endpoints
+StatusHistoryController.java - Status history tracking endpoints
+✅ Entities (6 files):
+
+Ticket.java - Main ticket entity with relationships
+TicketStatus.java - Status values entity
+TicketSystem.java - System categories entity
+TicketComment.java - Comment entity with @PrePersist documentation
+TicketAttachment.java - Attachment entity
+StatusHistory.java - Status change tracking entity
+✅ Services (6 files):
+
+TicketService.java - Business logic with status history tracking
+TicketStatusService.java - Status management service
+TicketSystemService.java - System management service
+TicketCommentService.java - Comment management with author preservation logic
+TicketAttachmentService.java - Attachment management service
+StatusHistoryService.java - History tracking service
+Documentation Style:
+
+Compact 1-2 line format
+English and Japanese translations included
+Only public classes and non-obvious public methods documented
+No documentation for getters, setters, or obvious CRUD operations
+Focused on purpose and non-obvious behavior
+Production-ready Spring Boot code standards maintained

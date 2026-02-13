@@ -2,6 +2,10 @@ package com.fullstack.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity representing available ticket status values.
+ * 利用可能なチケットステータス値を表すエンティティ。
+ */
 @Entity
 @Table(name = "ticket_status_tbl")
 public class TicketStatus {

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST controller for ticket system management.
+ * チケットシステム管理のRESTコントローラー。
+ */
 @RestController
 @RequestMapping("/api/systems")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,7 +37,10 @@ public class TicketSystemController {
                      .orElse(ResponseEntity.notFound().build());
     }
     
-    // Get system by name
+    /**
+     * Retrieves system by exact name match.
+     * 完全一致する名前でシステムを取得します。
+     */
     @GetMapping("/name/{name}")
     public ResponseEntity<TicketSystem> getSystemByName(@PathVariable String name) {
         Optional<TicketSystem> system = ticketSystemService.getSystemByName(name);

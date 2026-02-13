@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * REST controller for ticket status history tracking.
+ * チケットステータス履歴追跡のRESTコントローラー。
+ */
 @RestController
 @RequestMapping("/api/status-history")
 @CrossOrigin(origins = "*")
@@ -19,11 +23,14 @@ public class StatusHistoryController {
     @Autowired
     private StatusHistoryService statusHistoryService;
     
+    /**
+     * Retrieves status change history for a ticket, converted to DTOs to prevent circular references.
+     * チケットのステータス変更履歴を取得し、循環参照を防ぐためにDTOに変換します。
+     */
     @GetMapping("/ticket/{ticketId}")
     public ResponseEntity<List<Map<String, Object>>> getStatusHistoryByTicketId(@PathVariable Integer ticketId) {
         List<StatusHistory> historyList = statusHistoryService.getStatusHistoryByTicketId(ticketId);
         
-        // Convert to simplified DTO to avoid circular reference issues
         List<Map<String, Object>> response = historyList.stream()
             .map(history -> {
                 Map<String, Object> map = new HashMap<>();
